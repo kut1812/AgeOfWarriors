@@ -1,0 +1,102 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "mapdemo.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "background.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "background_clouds_big.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "background_clouds_medium.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "background_clouds_small.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "background_ocean.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "background_sand.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "background_sky.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "mapdemo.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 474,
+                "y": 391
+            }
+        },
+        "vegetation_tree_palm1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "vegetation_tree_palm2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "vegetation_tree_palm3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "vegetation_tree_palm4.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "vegetation_tree_palm5.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "vegetation_tree_palm6.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Android/Project/AgeOfWarriors/Resources/Map/Image",
+    "map.height": 25,
+    "map.lastUsedFormat": "tmx",
+    "map.width": 40,
+    "openFiles": [
+        "mapdemo.tmx",
+        "vegetation_tree_palm1.tsx",
+        "vegetation_tree_palm2.tsx",
+        "vegetation_tree_palm3.tsx",
+        "vegetation_tree_palm4.tsx",
+        "vegetation_tree_palm5.tsx",
+        "vegetation_tree_palm6.tsx",
+        "background.tsx"
+    ],
+    "project": "mapdemo.tiled-project",
+    "recentFiles": [
+        "background.tsx",
+        "vegetation_tree_palm6.tsx",
+        "vegetation_tree_palm5.tsx",
+        "vegetation_tree_palm4.tsx",
+        "vegetation_tree_palm3.tsx",
+        "vegetation_tree_palm2.tsx",
+        "vegetation_tree_palm1.tsx",
+        "mapdemo.tmx",
+        "background_clouds_small.tsx",
+        "background_clouds_medium.tsx",
+        "background_clouds_big.tsx",
+        "background_ocean.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}
