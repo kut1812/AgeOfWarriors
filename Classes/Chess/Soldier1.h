@@ -8,17 +8,15 @@
 USING_NS_CC;
 
 class GameScene;
-class Soldier1 : public Sprite
+class Soldier1 : public Chess
 {
 public:
 	static Soldier1* create(int categoryBitmask,int contactBitmask, int collisionBitmask);
 	virtual bool init(int categoryBitmask, int contactBitmask, int collisionBitmask);
-	PhysicsBody* chess_Soldider1_Physics;
-
-	int _healthChess;
-
+	virtual std::string getState();
+	virtual void setState(std::string state);
 	int getHealth();
-	void setHealth();
+	void setHealth(int dame);
 	void update(float);
 	void setParentScene(GameScene* parentScene);
 	

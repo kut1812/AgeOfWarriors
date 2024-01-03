@@ -9,7 +9,7 @@ class AnimationUtils
 public:
 	static Animation* createAnimation(std::string name, int numFrame, float duration);
 
-	std::pair<Animation*, int> createAnimation(std::string name, float duration);//ko khai bao tien to ben file .h, visual studio buil dc nhung platform khac loi
+	static std::pair<Animation*, int> createAnimation(std::string name, float duration);//ko khai bao tien to ben file .h, visual studio buil dc nhung platform khac loi
 
 	static bool loadSpriteFrameCache(std::string path, std::string fileName);
 };

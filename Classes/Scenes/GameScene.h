@@ -12,6 +12,7 @@ class GameScene :public cocos2d::Scene
 public:
 	bool init() override;
 	bool OnTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+	bool OnContactBegan(cocos2d::PhysicsContact& contact);
 	CREATE_FUNC(GameScene);
 protected:
 	ChessSpawn* characterSpawn;

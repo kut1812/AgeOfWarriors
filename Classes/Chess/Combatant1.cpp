@@ -22,20 +22,37 @@ bool Combatant1::init(int categoryBitmask, int contactBitmask, int collisionBitm
         return false;
     }
     _healthChess = 2;
+    _speedChess = 100.0f;
+    _currentState = "walk";
+    _state = "walk";
     auto visibleSize = Director::getInstance()->getVisibleSize();
     AnimationUtils::loadSpriteFrameCache("Animation/", "Combatant1_walk");
-    auto ani = AnimationUtils::createAnimation("Combatant1_walk",40, 0.05f);
-    Animate* animate = Animate::create(ani);
-    this->runAction(RepeatForever::create(animate));
+    auto aniWalk = AnimationUtils::createAnimation("Combatant1_walk", 99, 0.1f);
+    Animate* animate_Walk = Animate::create(aniWalk);
+    animateWalk = RepeatForever::create(animate_Walk);
+
+    AnimationUtils::loadSpriteFrameCache("Animation/", "Combatant1_attack");
+    auto aniAttack = AnimationUtils::createAnimation("Combatant1_attack", 99, 0.1f);
+    Animate* animate_Attack = Animate::create(aniAttack);
+    animateAttack = RepeatForever::create(animate_Attack);
+
+    AnimationUtils::loadSpriteFrameCache("Animation/", "Combatant1_die");
+    auto aniDie = AnimationUtils::createAnimation("Combatant1_die", 99, 0.1f);
+    Animate* animateDie = Animate::create(aniDie);
    
+    animateWalk->retain();
+    animateAttack->retain();
+    animateDie->retain();
+
+    this->runAction(animateWalk);
     this->setScaleX(-1);
 
-    chess_Combatant1_Physics = PhysicsBody::createBox(this->getContentSize());
-    chess_Combatant1_Physics->setDynamic(false);
-    chess_Combatant1_Physics->setCategoryBitmask(categoryBitmask);
-    chess_Combatant1_Physics->setContactTestBitmask(contactBitmask);
-    chess_Combatant1_Physics->setCollisionBitmask(collisionBitmask);
-    this->addComponent(chess_Combatant1_Physics);
+    chess_Physics = PhysicsBody::createBox(this->getContentSize());
+    chess_Physics->setDynamic(false);
+    chess_Physics->setCategoryBitmask(categoryBitmask);
+    chess_Physics->setContactTestBitmask(contactBitmask);
+    chess_Physics->setCollisionBitmask(collisionBitmask);
+    this->addComponent(chess_Physics);
     this->scheduleUpdate();
 
     return true;
@@ -56,7 +73,6 @@ void Combatant1::setHealth()
 
 void Combatant1::update(float)
 {
-    log("%lf", _position.x);
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
     if (this->getPositionX() > visibleSize.width * 0.9 || getHealth() == 0)
@@ -66,4 +82,15 @@ void Combatant1::update(float)
 }
 void Combatant1::setParentScene(GameScene* parentScene) {
     _parentScene = parentScene;
+}
+
+
+std::string Combatant1::getState()
+{
+    return _state;
+}
+
+void Combatant1::setState(std::string state)
+{
+    _state = state;
 }

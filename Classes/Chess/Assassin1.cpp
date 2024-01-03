@@ -21,20 +21,38 @@ bool Assassin1::init(int categoryBitmask, int contactBitmask, int collisionBitma
     {
         return false;
     }
+    _speedChess = 130.0f;
     _healthChess = 2;
+    _currentState = "walk";
+    _state = "walk";
     auto visibleSize = Director::getInstance()->getVisibleSize();
     AnimationUtils::loadSpriteFrameCache("Animation/", "Assassin1_walk");
-    auto ani = AnimationUtils::createAnimation("Assassin1_walk",21, 0.1f);
-    Animate* animate = Animate::create(ani);
-    this->runAction(RepeatForever::create(animate));
+    auto aniWalk = AnimationUtils::createAnimation("Assassin1_walk", 99, 0.1f);
+    Animate* animate_Walk = Animate::create(aniWalk);
+    animateWalk = RepeatForever::create(animate_Walk);
+
+    AnimationUtils::loadSpriteFrameCache("Animation/", "Assassin1_attack");
+    auto aniAttack = AnimationUtils::createAnimation("Assassin1_attack", 99, 0.1f);
+    Animate* animate_Attack = Animate::create(aniAttack);
+    animateAttack = RepeatForever::create(animate_Attack);
+
+    AnimationUtils::loadSpriteFrameCache("Animation/", "Assassin1_die");
+    auto aniDie = AnimationUtils::createAnimation("Assassin1_die", 99, 0.1f);
+    Animate* animateDie = Animate::create(aniDie);
+
+    animateWalk->retain();
+    animateAttack->retain();
+    animateDie->retain();
+
+    this->runAction(animateWalk);
     this->setScaleX(-1);
 
-    chess_Assassin1_Physics = PhysicsBody::createBox(this->getContentSize());
-    chess_Assassin1_Physics->setDynamic(false);
-    chess_Assassin1_Physics->setCategoryBitmask(categoryBitmask);
-    chess_Assassin1_Physics->setContactTestBitmask(contactBitmask);
-    chess_Assassin1_Physics->setCollisionBitmask(collisionBitmask);
-    this->addComponent(chess_Assassin1_Physics);
+    chess_Physics = PhysicsBody::createBox(this->getContentSize());
+    chess_Physics->setDynamic(false);
+    chess_Physics->setCategoryBitmask(categoryBitmask);
+    chess_Physics->setContactTestBitmask(contactBitmask);
+    chess_Physics->setCollisionBitmask(collisionBitmask);
+    this->addComponent(chess_Physics);
     this->scheduleUpdate();
 
     return true;
@@ -55,7 +73,6 @@ void Assassin1::setHealth()
 
 void Assassin1::update(float)
 {
-    log("%lf", _position.x);
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
     if (this->getPositionX() >visibleSize.width*0.9 || getHealth() == 0)
@@ -65,4 +82,14 @@ void Assassin1::update(float)
 }
 void Assassin1::setParentScene(GameScene* parentScene) {
     _parentScene = parentScene;
+}
+
+std::string Assassin1::getState()
+{
+    return _state;
+}
+
+void Assassin1::setState(std::string state)
+{
+    _state = state;
 }

@@ -1,4 +1,4 @@
-#include "GameScene.h"
+﻿#include "GameScene.h"
 #include "MainMenuScene.h"
 #include "SettingLayer.h"
 #include "ui/CocosGUI.h"
@@ -13,7 +13,7 @@ bool GameScene::init() {
 	{
 		return false;
 	}
-	
+	this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	layer = Layer::create();
@@ -23,17 +23,6 @@ bool GameScene::init() {
 	this->addChild(background);
 	this->addChild(layer,100);
 
-	auto yourBase = Sprite::create("Barrack/Lvl1_ori.png");
-	yourBase->setPosition(Vec2(visibleSize.width *0.1, visibleSize.height * 0.42));
-	yourBase->setScale(visibleSize.height / yourBase->getContentSize().height*0.2);
-	this->addChild(yourBase,10);
-
-	//auto enemyBase = Sprite::create("Barrack/Lvl1_ori.png");
-	//enemyBase->setFlippedX(-1);
-	//enemyBase->setPosition(Vec2(visibleSize.width *0.9, visibleSize.height * 0.42));
-	//enemyBase->setScale(visibleSize.height / enemyBase->getContentSize().height*0.2);
-	//this->addChild(enemyBase,10);
-
 	auto bgLayerDown = Sprite::create("Background/Btn_orange_active.png");
 	layer->addChild(bgLayerDown);
 	bgLayerDown->setAnchorPoint(Vec2(0.5, 0));
@@ -41,9 +30,10 @@ bool GameScene::init() {
 	bgLayerDown->setScaleX(visibleSize.width / bgLayerDown->getContentSize().width );
 	bgLayerDown->setPosition(Vec2(visibleSize.width  / 2, visibleSize.height*0));
 
-	// character spawn
-	characterSpawn = new ChessSpawn();
-	characterSpawn->init(this);
+	auto contactListener = EventListenerPhysicsContact::create();
+	contactListener->onContactBegin = CC_CALLBACK_1(GameScene::OnContactBegan, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
+
 
 	auto buttonChessSoldier = ui::Button::create("Icon/Soldier1.png", "Icon/Soldier1.png");
 	buttonChessSoldier->addTouchEventListener(
@@ -150,13 +140,19 @@ bool GameScene::init() {
 	buttonSetting->setScale(visibleSize.height / buttonSetting->getContentSize().height * 0.1);
 	layer->addChild(buttonSetting, 99);
 
+	// character spawn
+	characterSpawn = ChessSpawn::create(this);
+	this->addChild(characterSpawn);
+
 	// enemy spawn
-	enemy = new EnemySpawn();
-	enemy->init(this);
-	enemy->startSpawn(2.0f, 10);
-	
+	enemy = EnemySpawn::create(this);
+	this->addChild(enemy);
+	enemy->setSprites(characterSpawn->characters);
+	enemy->startSpawn();
 	this->schedule(CC_SCHEDULE_SELECTOR(GameScene::updateSpawn), 3.0f);
 	this->scheduleUpdate();
+	
+	layer->setPosition(this->getDefaultCamera()->getPosition()+ visibleSize / -2);
 	return true;
 }
 
@@ -165,17 +161,31 @@ bool GameScene::OnTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
 	return false;
 }
 
+bool GameScene::OnContactBegan(cocos2d::PhysicsContact& contact)
+{
+	auto chessA = dynamic_cast<Chess*>(contact.getShapeA()->getBody()->getNode());
+	auto chessB = dynamic_cast<Chess*>(contact.getShapeB()->getBody()->getNode());
+	PhysicsBody* bodyA = chessA->getPhysicsBody();
+	PhysicsBody* bodyB = chessB->getPhysicsBody();
+	if (bodyA->getCategoryBitmask()==DefineBitmask::Character && bodyB->getCategoryBitmask()==DefineBitmask::Enemy||
+		bodyB->getCategoryBitmask() == DefineBitmask::Character && bodyA->getCategoryBitmask() == DefineBitmask::Enemy)
+	{
+		CCLOG("Va cham xay ra!");
+		chessB->_state = "attack";
+		CCLOG("%s", chessB->_state.c_str());
+		CCLOG("Va cham xay ra!");
+		chessA->_state = "attack";
+		CCLOG("%s", chessA->_state.c_str());
+	}
+	return true;
+}
+
 void GameScene::update(float dt) {	
 	auto visibleSize = Director::getInstance()->getVisibleSize();
-	layer->setPosition(this->getDefaultCamera()->getPosition()+ visibleSize / -2);
 }
 
 void GameScene::updateSpawn(float dt)
 {
-	enemy->spawnSoldier1();
-	enemy->spawnSoldier1();
-	enemy->spawnArcher1();
-	enemy->spawnAssassin1();
-	enemy->spawnCombatant1();
+	
 }
 

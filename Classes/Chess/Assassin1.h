@@ -7,16 +7,13 @@
 USING_NS_CC;
 
 class GameScene;
-class Assassin1 : public Sprite
+class Assassin1 : public Chess
 {
 public:
 	static Assassin1* create(int categoryBitmask, int contactBitmask, int collisionBitmask);
 	virtual bool init(int categoryBitmask, int contactBitmask, int collisionBitmask);
-
-	PhysicsBody* chess_Assassin1_Physics;
-
-	int _healthChess;
-
+	virtual std::string getState();
+	virtual void setState(std::string state);
 	int getHealth();
 	void setHealth();
 	void update(float);

@@ -21,20 +21,37 @@ bool Archer1::init(int categoryBitmask, int contactBitmask, int collisionBitmask
         return false;
     }
     _healthChess = 2;
+    _speedChess = 80.0f;
+    _currentState = "walk";
+    _state = "walk";
     auto visibleSize = Director::getInstance()->getVisibleSize();
     AnimationUtils::loadSpriteFrameCache("Animation/", "Archer1_walk");
-    auto ani = AnimationUtils::createAnimation("Archer1_walk",15, 0.1f);
-    Animate* animate = Animate::create(ani);
-    this->runAction(RepeatForever::create(animate));
-   
+    auto aniWalk = AnimationUtils::createAnimation("Archer1_walk", 99, 0.1f);
+    Animate* animate_Walk = Animate::create(aniWalk);
+    animateWalk=RepeatForever::create(animate_Walk);
+    
+    AnimationUtils::loadSpriteFrameCache("Animation/", "Archer1_attack");
+    auto aniAttack = AnimationUtils::createAnimation("Archer1_attack", 99, 0.1f);
+    Animate* animate_Attack = Animate::create(aniAttack);
+    animateAttack=RepeatForever::create(animate_Attack);
+    
+    AnimationUtils::loadSpriteFrameCache("Animation/", "Archer1_die");
+    auto aniDie = AnimationUtils::createAnimation("Archer1_die", 99, 0.1f);
+    animateDie = Animate::create(aniDie);
+    
+    animateWalk->retain();
+    animateAttack->retain();
+    animateDie->retain();
+
+    this->runAction(animateWalk);
     this->setScaleX(-1);
 
-    chess_Archer1_Physics = PhysicsBody::createBox(this->getContentSize());
-    chess_Archer1_Physics->setDynamic(false);
-    chess_Archer1_Physics->setCategoryBitmask(categoryBitmask);
-    chess_Archer1_Physics->setContactTestBitmask(contactBitmask);
-    chess_Archer1_Physics->setCollisionBitmask(collisionBitmask);
-    this->addComponent(chess_Archer1_Physics);
+    chess_Physics = PhysicsBody::createBox(this->getContentSize());
+    chess_Physics->setDynamic(false);
+    chess_Physics->setCategoryBitmask(categoryBitmask);
+    chess_Physics->setContactTestBitmask(contactBitmask);
+    chess_Physics->setCollisionBitmask(collisionBitmask);
+    this->addComponent(chess_Physics);
     this->scheduleUpdate();
 
     return true;
@@ -53,9 +70,19 @@ void Archer1::setHealth()
     }
 }
 
+std::string Archer1::getState()
+{
+    return _state;
+}
+
+void Archer1::setState(std::string state)
+{
+    _state = state;
+}
+
+
 void Archer1::update(float)
 {
-    log("%lf", _position.x);
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
     if (this->getPositionX() >visibleSize.width*0.9 || getHealth() == 0)
